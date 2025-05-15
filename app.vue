@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
-    <NuxtWelcome />
-  </div>
+  <NuxtLayout />
 </template>
+
+<style>
+html {
+  scroll-behavior: smooth;
+}
+</style>
