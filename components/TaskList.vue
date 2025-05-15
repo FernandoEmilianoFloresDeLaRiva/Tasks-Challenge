@@ -1,11 +1,6 @@
 <template>
     <div>
-        <v-progress-circular
-            v-if="loading"
-            indeterminate
-            color="primary"
-            class="my-8 d-flex justify-center"
-        />
+        <v-progress-circular v-if="loading" indeterminate color="primary" class="my-8 d-flex justify-center" />
         <v-list v-else lines="two">
             <template v-for="(task, index) in tasks" :key="task.id">
                 <v-list-item @click="openTask(task)">
@@ -25,12 +20,14 @@
                     </v-list-item-subtitle>
 
                     <template v-slot:append>
-                        <v-btn icon :to="`/tasks/${task.id}`" @click.stop>
-                            <v-icon color="grey">mdi-pencil</v-icon>
-                        </v-btn>
-                        <v-btn icon @click.stop="deleteTask(task.id)">
-                            <v-icon color="grey">mdi-delete</v-icon>
-                        </v-btn>
+                        <div class="d-flex" style="gap: 8px;">
+                            <v-btn icon :to="`/tasks/${task.id}`" @click.stop>
+                                <v-icon color="grey">mdi-pencil</v-icon>
+                            </v-btn>
+                            <v-btn icon @click.stop="deleteTask(task.id)">
+                                <v-icon color="grey">mdi-delete</v-icon>
+                            </v-btn>
+                        </div>
                     </template>
                 </v-list-item>
 
