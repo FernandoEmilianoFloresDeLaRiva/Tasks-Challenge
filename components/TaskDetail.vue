@@ -56,8 +56,8 @@
                 <v-list-item v-if="task?.tags">
                     <v-list-item-title>Tags</v-list-item-title>
                     <v-list-item-subtitle class="d-flex flex-wrap pt-2">
-                        <v-chip v-for="tag in task?.tags?.split(',')" :key="tag" small class="mr-2">
-                            {{ tag != '' }}
+                        <v-chip v-for="tag in task?.tags?.split(',')?.filter((t) => t != '')" :key="tag" small class="mr-2">
+                            {{ tag }}
                         </v-chip>
                     </v-list-item-subtitle>
                 </v-list-item>

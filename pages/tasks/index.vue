@@ -3,11 +3,11 @@
     <v-row>
       <v-col cols="12" md="8" offset-md="2">
         <v-btn color="primary" class="mb-4" to="/tasks/add_task">Nueva Tarea</v-btn>
-        <v-col class="pa-2 elevation-1 rounded-lg"  style="background: #f8fafc;">
-          <v-btn-toggle v-model="filter" class="mb-4" mandatory>
-            <v-btn value="all">Ver todas</v-btn>
-            <v-btn value="incomplete">No completadas</v-btn>
-            <v-btn value="completed">Completadas</v-btn>
+        <v-col class="pa-2 elevation-1 rounded-lg" style="background: #f8fafc;">
+          <v-btn-toggle v-model="filter" class="mb-4 w-100 d-flex" mandatory>
+            <v-btn value="all" class="flex-grow-1">Ver todas</v-btn>
+            <v-btn value="incomplete" class="flex-grow-1">No completadas</v-btn>
+            <v-btn value="completed" class="flex-grow-1">Completadas</v-btn>
           </v-btn-toggle>
           <TaskList :tasks="filteredTasks" :loading="tasksStore.loading" @deleted="tasksStore.fetchTasks"
             @updated="tasksStore.fetchTasks" />

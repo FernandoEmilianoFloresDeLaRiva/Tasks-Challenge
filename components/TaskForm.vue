@@ -10,17 +10,13 @@
 
                 <v-checkbox v-model="form.is_completed" label="Completada" />
 
-                <v-text-field
-                    v-model="form.due_date"
-                    label="Fecha de vencimiento"
-                    type="date"
-                />
+                <v-text-field v-model="form.due_date" label="Fecha de vencimiento" type="date" />
 
                 <v-textarea v-model="form.description" label="Descripción" rows="2" />
 
                 <v-textarea v-model="form.comments" label="Comentarios" rows="2" />
 
-                <v-combobox v-model="form.tags" label="Tags" multiple chips deletable-chips />
+                <v-text-field v-model="form.tags" label="Tags" />
 
                 <v-btn type="submit" color="primary" :loading="loading" class="mr-4">
                     {{ editing ? 'Actualizar' : 'Guardar' }}
@@ -88,7 +84,7 @@ watch(
             editing.value = true
             form.value = {
                 title: task.title,
-                is_completed: task.is_completed,
+                is_completed: task.is_completed == 1 ? true : false,
                 due_date: task.due_date ?? '',
                 description: task.description || '',
                 comments: task.comments || '',

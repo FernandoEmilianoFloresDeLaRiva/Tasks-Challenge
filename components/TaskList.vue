@@ -36,7 +36,7 @@
                 <v-divider v-if="index < tasks.length - 1" />
             </template>
 
-            <v-list-item v-if="tasks.length === 0">
+            <v-list-item v-if="tasks.length === 0 && loading === false">
                 <v-list-item-title class="text-center grey--text">
                     No hay tareas para mostrar
                 </v-list-item-title>
