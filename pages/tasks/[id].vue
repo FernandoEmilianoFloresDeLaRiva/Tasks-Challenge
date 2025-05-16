@@ -16,11 +16,12 @@ const task = ref<TaskDetail | null>(null)
 
 onMounted(async () => {
   const { $tasksApi } = useNuxtApp()
-  const response = await $tasksApi.getOne(parseInt(route.params.id))
+  const idParam = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+  const response = await $tasksApi.getOne(parseInt(idParam))
   task.value = TaskDetail.fromJson(response)
-})  
+})
 
 function goToList() {
   router.push('/tasks')
 }
-</script> 
+</script>

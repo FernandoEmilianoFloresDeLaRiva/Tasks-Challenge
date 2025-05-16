@@ -22,14 +22,18 @@
 
                 <v-text-field v-model="form.tags" label="Tags" />
                 <v-checkbox v-model="form.is_completed" label="Completada" />
-
-                <v-btn type="submit" color="primary" :loading="loading" class="mr-4" :disabled="form.title === ''">
-                    {{ editing ? 'Actualizar' : 'Guardar' }}
-                </v-btn>
-
-                <v-btn v-if="editing" @click="cancelEdit" color="secondary">
-                    Cancelar
-                </v-btn>
+                <v-row>
+                    <v-col cols="12" md="6">
+                        <v-btn color="primary" type="submit" :loading="loading" class="w-100">
+                            {{ editing ? 'Actualizar' : 'Crear' }}
+                        </v-btn>
+                    </v-col>
+                    <v-col cols="12" md="6" v-if="editing">
+                        <v-btn color="grey" @click="cancelEdit" class="w-100">
+                            Cancelar
+                        </v-btn>
+                    </v-col>
+                </v-row>
             </v-form>
         </v-card-text>
     </v-card>
