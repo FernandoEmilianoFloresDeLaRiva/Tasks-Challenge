@@ -1,10 +1,10 @@
 <template>
     <v-card class="py-4">
-        <v-card-actions class="pr-9">
-            <v-card-title class="headline d-flex align-center gap-4 text-h5">
-                <v-btn icon @click="$emit('close')">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
+        <v-card-actions class="pr-9 flex-wrap">
+            <v-btn icon @click="$emit('close')">
+                <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-card-title class="headline d-flex align-center gap-4 text-h5 text-wrap">
                 Detalles de la Tarea
                 <v-spacer />
             </v-card-title>
@@ -20,7 +20,7 @@
             <v-list class="rounded-lg">
                 <v-list-item>
                     <v-list-item-title>Título</v-list-item-title>
-                    <v-list-item-subtitle>{{ task?.title }}</v-list-item-subtitle>
+                    <v-list-item-subtitle style="display: inline-block;">{{ task?.title }}</v-list-item-subtitle>
                     <template v-slot:append>
                         <v-chip :color="task?.is_completed ? 'success' : 'warning'" dark>
                             {{ task?.is_completed ? 'Completada' : 'Pendiente' }}
@@ -41,7 +41,7 @@
 
                 <v-list-item v-if="task?.description">
                     <v-list-item-title>Descripción</v-list-item-title>
-                    <v-list-item-subtitle>
+                    <v-list-item-subtitle style="display: inline-block;">
                         {{ task?.description }}
                     </v-list-item-subtitle>
                 </v-list-item>
@@ -50,7 +50,7 @@
 
                 <v-list-item v-if="task?.comments">
                     <v-list-item-title>Comentarios</v-list-item-title>
-                    <v-list-item-subtitle>
+                    <v-list-item-subtitle style="display: inline-block;">
                         {{ task?.comments }}
                     </v-list-item-subtitle>
                 </v-list-item>
@@ -61,7 +61,7 @@
                     <v-list-item-title>Tags</v-list-item-title>
                     <v-list-item-subtitle class="d-flex flex-wrap pt-2">
                         <v-chip v-for="tag in task?.tags?.split(',')?.filter((t) => t != '')" :key="tag" small
-                            class="mr-2">
+                            class="mr-2 mt-2">
                             {{ tag }}
                         </v-chip>
                     </v-list-item-subtitle>

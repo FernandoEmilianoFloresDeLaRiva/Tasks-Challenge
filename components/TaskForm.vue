@@ -6,7 +6,7 @@
         {{ error }}
     </v-alert>
     <v-card variant="outlined" class="my-6 pt-4 px-4 elevation-1 rounded-lg border-none">
-        <v-card-title class="text-h6 font-weight-bold px-0 ">
+        <v-card-title class="text-h6 font-weight-bold px-0 text-center">
             {{ editing ? 'Editar Tarea' : 'Nueva Tarea' }}
         </v-card-title>
         <v-card-text class="px-0">
