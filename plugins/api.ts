@@ -18,7 +18,7 @@ export default defineNuxtPlugin(() => {
 
     // Obtener una tarea por id
     getOne: async (id: number) =>
-      await $fetch(`tasks/${id}`, {
+      (await $fetch(`tasks/${id}`, {
         baseURL,
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -26,7 +26,7 @@ export default defineNuxtPlugin(() => {
         params: {
           token: authToken,
         },
-      }),
+      }) as unknown as [0])[0],
       
     // Crear nueva tarea
     create: async (data: any) =>

@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <v-progress-circular v-if="loading" indeterminate color="primary" class="my-8 d-flex justify-center" />
-        <v-list v-else class="rounded-lg bg-transparent">
+    <div class="flex justify-center col">
+        <v-progress-circular v-if="loading" indeterminate color="primary" class="my-8" />
+        <v-list v-else class="rounded-lg bg-transparent w-100">
             <template v-for="(task, index) in tasks" :key="task.id">
-                <v-list-item @click="openTask(task)" :class="[
+                <v-list-item @click="openTask(task.id)" :class="[
                     'rounded-lg mb-2 transition-all',
                     task.is_completed ? 'completed-task' : 'pending-task',
                 ]" style="cursor:pointer; min-height: 64px;">
@@ -43,8 +43,8 @@
             </v-list-item>
         </v-list>
 
-        <v-dialog v-model="dialog" max-width="600px" v-if="selectedTask">
-            <TaskDetail :task="selectedTask" @close="dialog = false" @updated="$emit('updated')" />
+        <v-dialog v-model="dialog" max-width="600px" v-if="selectedTaskId != 0">
+            <TaskDetail :taskId="selectedTaskId" @close="dialog = false" @updated="$emit('updated')" />
         </v-dialog>
     </div>
 </template>
@@ -54,7 +54,7 @@ import { ref } from 'vue'
 import { useTasksStore } from '~/stores/tasks'
 import { Task } from '~/entities/Task.entity'
 
-const props = defineProps({
+defineProps({
     tasks: {
         type: Array as PropType<Task[]>,
         default: () => [],
@@ -71,15 +71,15 @@ const tasksStore = useTasksStore()
 const { updateTask } = tasksStore
 
 const dialog = ref(false)
-const selectedTask = ref<Task | null>(null)
+const selectedTaskId = ref<number>(0)
 
 const formatDate = (date: string) => {
     if (!date) return ''
     return new Date(date).toLocaleDateString()
 }
 
-const openTask = (task: Task) => {
-    selectedTask.value = task
+const openTask = (taskId: number) => {
+    selectedTaskId.value = taskId
     dialog.value = true
 }
 

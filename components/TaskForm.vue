@@ -69,7 +69,6 @@ const form = ref({
 })
 
 const editing = ref(false)
-const datePickerMenu = ref(false)
 
 const resetForm = () => {
     form.value = {

@@ -1,5 +1,8 @@
 <template>
-  <NuxtLayout />
+  <NuxtLayout name="default">
+    <NuxtPage />
+    <NuxtProgress />
+  </NuxtLayout>
 </template>
 
 <style>
