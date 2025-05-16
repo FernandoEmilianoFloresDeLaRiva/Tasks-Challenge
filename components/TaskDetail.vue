@@ -74,6 +74,7 @@
 
 <script setup lang="ts">
 import { TaskDetail } from '~/entities/TaskDetail.entity'
+import { formatDate } from '~/composables/useDateUtils'
 
 const props = defineProps({
     taskId: {
@@ -95,9 +96,4 @@ onMounted(async () => {
     task.value = TaskDetail.fromJson(response)
     loading.value = false
 })
-
-const formatDate = (date: string) => {
-    if (!date) return ''
-    return new Date(date).toLocaleDateString()
-}
 </script>

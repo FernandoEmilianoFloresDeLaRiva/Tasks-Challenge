@@ -43,8 +43,8 @@
             </v-list-item>
         </v-list>
 
-        <v-dialog v-model="dialog" max-width="600px" v-if="selectedTaskId != 0">
-            <TaskDetail :taskId="selectedTaskId" @close="dialog = false" @updated="$emit('updated')" />
+        <v-dialog v-model="dialog" max-width="600px" v-if="selectedTaskId">
+            <TaskDetail :taskId="selectedTaskId || 0" @close="dialog = false" @updated="$emit('updated')" />
         </v-dialog>
     </div>
 </template>
@@ -53,6 +53,9 @@
 import { ref } from 'vue'
 import { useTasksStore } from '~/stores/tasks'
 import { Task } from '~/entities/Task.entity'
+import { formatDate } from '~/composables/useDateUtils'
+import { useDialog } from '~/composables/useDialog'
+import { useConfirmDialog } from '~/composables/useConfirmDialog'
 
 defineProps({
     tasks: {
@@ -70,21 +73,17 @@ const emit = defineEmits(['deleted', 'updated'])
 const tasksStore = useTasksStore()
 const { updateTask } = tasksStore
 
-const dialog = ref(false)
-const selectedTaskId = ref<number>(0)
+// Usar useDialog para manejar el diálogo y la tarea seleccionada
+const { dialog, selectedId: selectedTaskId, open, close } = useDialog<number>()
 
-const formatDate = (date: string) => {
-    if (!date) return ''
-    return new Date(date).toLocaleDateString()
-}
+const { confirm } = useConfirmDialog('¿Estás seguro de que quieres eliminar esta tarea?')
 
 const openTask = (taskId: number) => {
-    selectedTaskId.value = taskId
-    dialog.value = true
+    open(taskId)
 }
 
 const deleteTask = async (taskId: number) => {
-    if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
+    if (await confirm()) {
         try {
             await tasksStore.deleteTask(taskId)
             emit('deleted')

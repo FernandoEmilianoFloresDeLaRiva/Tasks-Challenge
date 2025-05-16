@@ -41,12 +41,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useTasksStore } from '~/stores/tasks'
+import { useTaskForm } from '~/composables/useTaskForm'
+import { TaskDetail } from '~/entities/TaskDetail.entity'
 
 const props = defineProps({
     task: {
-        type: Object,
+        type: TaskDetail,
         default: null
     },
 })
@@ -57,72 +59,18 @@ const tasksStore = useTasksStore()
 const { loading, successMessage, error } = storeToRefs(tasksStore)
 const { createTask, updateTask } = tasksStore
 
-const getToday = () => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-}
-
-const form = ref({
-    title: '',
-    is_completed: false,
-    due_date: getToday(),
-    description: '',
-    comments: '',
-    tags: '',
-})
-
-const editing = ref(false)
-
-const resetForm = () => {
-    form.value = {
-        title: '',
-        is_completed: false,
-        due_date: getToday(),
-        description: '',
-        comments: '',
-        tags: '',
-    }
-}
-
-watch(
-    () => props.task,
-    (task) => {
-        if (task) {
-            editing.value = true
-            form.value = {
-                title: task.title,
-                is_completed: task.is_completed == 1 ? true : false,
-                due_date: task.due_date ?? '',
-                description: task.description || '',
-                comments: task.comments || '',
-                tags: task.tags,
-            }
-        } else {
-            editing.value = false
-            resetForm()
-        }
-    },
-    { immediate: true }
-)
+const { form, editing, resetForm } = useTaskForm(props?.task)
 
 const submit = async () => {
     try {
-        const taskData = {
-            ...form.value,
-            tags: form.value.tags,
-        }
-
         if (editing.value) {
-            await updateTask(props.task.id, taskData)
+            await updateTask(props.task.id, form.value)
             setTimeout(() => {
                 emit('updated')
             }, 1500)
         } else {
-            console.log(taskData)
-            await createTask(taskData)
+            console.log(form.value)
+            await createTask(form.value)
             setTimeout(() => {
                 emit('created')
                 resetForm()

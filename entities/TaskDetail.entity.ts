@@ -1,8 +1,6 @@
-export class TaskDetail {
-  id: number = 0;
-  title: string = "";
-  is_completed: number = 0; // 0 or 1
-  due_date: string = ""; // YYYY-MM-DD
+import { Task } from './Task.entity'
+
+export class TaskDetail extends Task {
   comments?: string;
   description?: string;
   tags?: string;
@@ -10,14 +8,13 @@ export class TaskDetail {
   created_at?: string;
   updated_at?: string;
 
-  constructor() {}
+  constructor() {
+    super();
+  }
 
-  static fromJson(json: any): TaskDetail {
+  static override fromJson(json: any): TaskDetail {
     const task = new TaskDetail();
-    task.id = json["id"];
-    task.title = json["title"];
-    task.is_completed = json["is_completed"];
-    task.due_date = json["due_date"];
+    Object.assign(task, Task.fromJson(json));
     task.comments = json["comments"];
     task.description = json["description"];
     task.tags = json["tags"];
