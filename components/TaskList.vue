@@ -1,36 +1,38 @@
 <template>
     <div>
         <v-progress-circular v-if="loading" indeterminate color="primary" class="my-8 d-flex justify-center" />
-        <v-list v-else lines="two">
+        <v-list v-else class="rounded-lg bg-transparent">
             <template v-for="(task, index) in tasks" :key="task.id">
-                <v-list-item @click="openTask(task)">
-                    <template v-slot:prepend>
-                        <v-checkbox v-model="task.is_completed" @click.stop="toggleTaskCompletion(task)"
-                            color="primary" />
+                <v-list-item @click="openTask(task)" :class="[
+                    'rounded-lg mb-2 transition-all',
+                    task.is_completed ? 'completed-task' : 'pending-task',
+                ]" style="cursor:pointer; min-height: 64px;">
+                    <template #prepend>
+                        <v-icon v-if="task.is_completed" color="success" class="mr-2"
+                            @click="toggleTaskCompletion(task)">mdi-check-circle</v-icon>
+                        <v-icon v-else color="warning" class="mr-2"
+                            @click="toggleTaskCompletion(task)">mdi-clock-outline</v-icon>
                     </template>
 
-                    <v-list-item-title :class="{ 'text-decoration-line-through': task.is_completed }">
+                    <v-list-item-title class="font-weight-medium text-body-1">
                         {{ task.title }}
                     </v-list-item-title>
-                    <v-list-item-subtitle>
-                        {{ formatDate(task.due_date) }}
-                        <v-chip v-for="tag in task.tags?.split(',')" :key="tag" small class="ml-2">
-                            {{ tag }}
-                        </v-chip>
+                    <v-list-item-subtitle class="d-flex align-center" style="gap: 8px;">
+                        <v-icon size="16" color="grey">mdi-calendar</v-icon>
+                        <span>{{ formatDate(task.due_date) }}</span>
                     </v-list-item-subtitle>
 
                     <template v-slot:append>
-                        <div class="d-flex" style="gap: 8px;">
-                            <v-btn icon :to="`/tasks/${task.id}`" @click.stop>
-                                <v-icon color="grey">mdi-pencil</v-icon>
+                        <div class="d-flex align-center" style="gap: 8px;">
+                            <v-btn icon :to="`/tasks/${task.id}`" @click.stop size="small" variant="text">
+                                <v-icon color="primary">mdi-pencil</v-icon>
                             </v-btn>
-                            <v-btn icon @click.stop="deleteTask(task.id)">
-                                <v-icon color="grey">mdi-delete</v-icon>
+                            <v-btn icon @click.stop="deleteTask(task.id)" size="small" variant="text">
+                                <v-icon color="red">mdi-delete</v-icon>
                             </v-btn>
                         </div>
                     </template>
                 </v-list-item>
-
                 <v-divider v-if="index < tasks.length - 1" />
             </template>
 
@@ -69,19 +71,19 @@ const tasksStore = useTasksStore()
 const { updateTask } = tasksStore
 
 const dialog = ref(false)
-const selectedTask = ref(null)
+const selectedTask = ref<Task | null>(null)
 
-const formatDate = (date) => {
+const formatDate = (date: string) => {
     if (!date) return ''
     return new Date(date).toLocaleDateString()
 }
 
-const openTask = (task) => {
+const openTask = (task: Task) => {
     selectedTask.value = task
     dialog.value = true
 }
 
-const deleteTask = async (taskId) => {
+const deleteTask = async (taskId: number) => {
     if (confirm('¿Estás seguro de que quieres eliminar esta tarea?')) {
         try {
             await tasksStore.deleteTask(taskId)
@@ -92,7 +94,7 @@ const deleteTask = async (taskId) => {
     }
 }
 
-const toggleTaskCompletion = async (task) => {
+const toggleTaskCompletion = async (task: Task) => {
     try {
         await updateTask(task.id, {
             ...task,
@@ -104,3 +106,24 @@ const toggleTaskCompletion = async (task) => {
     }
 }
 </script>
+
+<style scoped>
+.completed-task {
+    background: #e6f9ec !important;
+    border: 1px solid #b2e5c7;
+}
+
+.pending-task {
+    background: #fff !important;
+    border: 1px solid #e0e0e0;
+}
+
+.v-list-item {
+    transition: box-shadow 0.2s, border 0.2s;
+}
+
+.v-list-item:hover {
+    box-shadow: 0 2px 12px 0 rgba(60, 60, 60, 0.08);
+    border-color: #90caf9;
+}
+</style>
