@@ -1,19 +1,23 @@
 <template>
     <v-card class="py-4">
-        <v-card-title class="headline d-flex align-center gap-4">
-            <v-btn icon @click="$emit('close')">
-                <v-icon>mdi-close</v-icon>
-            </v-btn>
-            Detalles de la Tarea
+        <v-card-actions class="pr-9">
+            <v-card-title class="headline d-flex align-center gap-4 text-h5">
+                <v-btn icon @click="$emit('close')">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+                Detalles de la Tarea
+                <v-spacer />
+            </v-card-title>
             <v-spacer />
-        </v-card-title>
+            <v-btn color="primary" :to="`/tasks/${taskId}`">Editar</v-btn>
+        </v-card-actions>
 
         <div v-if="loading" class="flex justify-center align-center col w-100">
             <v-progress-circular indeterminate color="primary" class="my-8" />
         </div>
 
         <v-card-text v-else>
-            <v-list class="rounded-lg elevation-2">
+            <v-list class="rounded-lg">
                 <v-list-item>
                     <v-list-item-title>Título</v-list-item-title>
                     <v-list-item-subtitle>{{ task?.title }}</v-list-item-subtitle>
@@ -56,7 +60,8 @@
                 <v-list-item v-if="task?.tags">
                     <v-list-item-title>Tags</v-list-item-title>
                     <v-list-item-subtitle class="d-flex flex-wrap pt-2">
-                        <v-chip v-for="tag in task?.tags?.split(',')?.filter((t) => t != '')" :key="tag" small class="mr-2">
+                        <v-chip v-for="tag in task?.tags?.split(',')?.filter((t) => t != '')" :key="tag" small
+                            class="mr-2">
                             {{ tag }}
                         </v-chip>
                     </v-list-item-subtitle>
@@ -64,10 +69,6 @@
             </v-list>
         </v-card-text>
 
-        <v-card-actions class="pr-5">
-            <v-spacer />
-            <v-btn color="primary" :to="`/tasks/${taskId}`">Editar</v-btn>
-        </v-card-actions>
     </v-card>
 </template>
 
