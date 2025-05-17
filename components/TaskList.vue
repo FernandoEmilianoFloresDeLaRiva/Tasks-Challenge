@@ -50,12 +50,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useTasksStore } from '~/stores/tasks'
 import { Task } from '~/entities/Task.entity'
 import { formatDate } from '~/composables/useDateUtils'
 import { useDialog } from '~/composables/useDialog'
 import { useConfirmDialog } from '~/composables/useConfirmDialog'
+import { TaskPayloadDTO } from '~/entities/TaskPayload.dto'
 
 defineProps({
     tasks: {
@@ -95,10 +95,14 @@ const deleteTask = async (taskId: number) => {
 
 const toggleTaskCompletion = async (task: Task) => {
     try {
-        await updateTask(task.id, {
-            ...task,
-            is_completed: !task.is_completed,
-        })
+        await updateTask(task.id,
+            new TaskPayloadDTO()
+                .setId(task.id)
+                .setTitle(task.title)
+                .setIsCompleted(!task.is_completed)
+                .setDueDate(task.due_date)
+                .build()
+        )
         emit('updated')
     } catch (error) {
         console.error(error)

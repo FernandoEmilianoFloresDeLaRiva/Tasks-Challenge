@@ -44,11 +44,14 @@
 import { storeToRefs } from 'pinia'
 import { useTasksStore } from '~/stores/tasks'
 import { useTaskForm } from '~/composables/useTaskForm'
+import { Task } from '~/entities/Task.entity'
 import { TaskDetail } from '~/entities/TaskDetail.entity'
+import type { PropType } from 'vue'
+import { TaskPayloadDTO } from '~/entities/TaskPayload.dto'
 
 const props = defineProps({
     task: {
-        type: TaskDetail,
+        type: Object as PropType<Task | TaskDetail>,
         default: null
     },
 })
@@ -64,13 +67,30 @@ const { form, editing, resetForm } = useTaskForm(props?.task)
 const submit = async () => {
     try {
         if (editing.value) {
-            await updateTask(props.task.id, form.value)
+            await updateTask(
+                props.task.id,
+                new TaskPayloadDTO()
+                    .setId(props.task.id)
+                    .setTitle(form.value.title)
+                    .setIsCompleted(form.value.is_completed)
+                    .setDueDate(form.value.due_date)
+                    .setComments(form.value.comments)
+                    .setDescription(form.value.description)
+                    .setTags(form.value.tags)
+                    .build()
+            )
             setTimeout(() => {
                 emit('updated')
             }, 1500)
         } else {
-            console.log(form.value)
-            await createTask(form.value)
+            await createTask(new TaskPayloadDTO()
+                .setTitle(form.value.title)
+                .setIsCompleted(form.value.is_completed)
+                .setDueDate(form.value.due_date)
+                .setDescription(form.value.description)
+                .setComments(form.value.comments)
+                .setTags(form.value.tags)
+                .build())
             setTimeout(() => {
                 emit('created')
                 resetForm()
