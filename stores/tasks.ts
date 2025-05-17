@@ -9,7 +9,7 @@ import type { TaskPayloadDTO } from "~/entities/TaskPayload.dto";
 export const useTasksStore = defineStore("tasks", {
   state: () => ({
     tasks: [] as Task[],
-    loading: false,
+    loading: true,
     error: null as string | null,
     successMessage: null as string | null,
   }),
