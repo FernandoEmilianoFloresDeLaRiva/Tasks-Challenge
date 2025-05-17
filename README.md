@@ -23,6 +23,20 @@ stores/          # Pinia stores (tasks)
 public/          # Static assets
 ```
 
+## Environment Variables
+
+This project uses environment variables for API configuration. To set them up:
+
+1. Copy `.env.example` to `.env` in the project root:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Fill in the required variables in `.env`:
+   - `NUXT_API_BASE_URL` – The base URL for the tasks API
+   - `NUXT_API_TOKEN` – The authentication token for the API
+
 ## How to Run
 
 1. **Install dependencies:**
