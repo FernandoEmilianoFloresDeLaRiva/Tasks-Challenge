@@ -1,9 +1,9 @@
 import { ref } from 'vue'
 
 /**
- * Formatea una fecha a string local (dd/mm/aaaa)
- * @param date Fecha en string o Date
- * @returns Fecha formateada
+ * Format a date to a local string (dd/mm/yyyy)
+ * @param date Date as string or Date object
+ * @returns Formatted date string
  */
 export function formatDate(date?: string | Date): string {
   if (!date) return ''
@@ -12,8 +12,8 @@ export function formatDate(date?: string | Date): string {
 }
 
 /**
- * Obtiene la fecha de hoy en formato yyyy-mm-dd
- * @returns Fecha de hoy como string
+ * Get today's date in yyyy-mm-dd format
+ * @returns Today's date as string
  */
 export function getToday(): string {
   const today = new Date()

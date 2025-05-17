@@ -2,7 +2,14 @@ import { ref, watch } from "vue";
 import { getToday } from "./useDateUtils";
 import type { TaskDetail } from "~/entities/TaskDetail.entity";
 
+/**
+ * Composable for managing the state and logic of a task form.
+ * Handles edit mode, form reset, and sync with a given task.
+ * @param propsTask Optional task to edit
+ * @returns { form, editing, resetForm }
+ */
 export function useTaskForm(propsTask?: TaskDetail | null) {
+  // Reactive form state
   const form = ref({
     title: "",
     is_completed: false,
@@ -12,8 +19,12 @@ export function useTaskForm(propsTask?: TaskDetail | null) {
     tags: "",
   });
 
+  // Whether the form is in edit mode
   const editing = ref(false);
 
+  /**
+   * Reset the form to its initial state
+   */
   function resetForm() {
     form.value = {
       title: "",
@@ -25,6 +36,7 @@ export function useTaskForm(propsTask?: TaskDetail | null) {
     };
   }
 
+  // Watch for changes in the input task and update the form accordingly
   watch(
     () => propsTask,
     (task) => {
