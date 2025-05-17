@@ -8,6 +8,7 @@ _A technical test project built with Nuxt 3, Pinia, Vuetify, and TypeScript. Thi
 - [Folder Structure](#folder-structure)
 - [Environment Variables](#environment-variables)
 - [How to Run](#how-to-run)
+- [Docker](#docker)
 - [Testing](#testing)
 - [Dependencies](#dependencies)
 - [Architecture & Patterns](#architecture--patterns)
@@ -70,6 +71,24 @@ This project uses environment variables for API configuration. To set them up:
    npm run build
    npm run preview
    ```
+
+## Docker
+
+You can run this app in a containerized environment using Docker.
+
+1. **Build the Docker image:**
+
+   ```bash
+   docker build -t nuxt-task-manager .
+   ```
+
+2. **Run the container:**
+
+   ```bash
+   docker run --env-file .env -p 3000:3000 nuxt-task-manager
+   ```
+
+> **Note:** The container expects a `.env` file in the project root with the required environment variables.
 
 ## Testing
 
