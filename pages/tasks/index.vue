@@ -1,3 +1,8 @@
+<!--
+  tasks/index.vue
+  ---------------
+  Main task list page. Shows all tasks and allows filtering, editing, and deleting.
+-->
 <template>
   <v-container>
     <v-row class="w-70">

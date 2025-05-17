@@ -1,3 +1,8 @@
+<!--
+  tasks/add_task.vue
+  ------------------
+  Page for creating a new task. Shows the TaskForm component.
+-->
 <template>
   <v-container>
     <v-row>

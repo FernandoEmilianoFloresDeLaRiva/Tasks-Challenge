@@ -1,18 +1,35 @@
+<!--
+  TaskList.vue
+  -------------
+  Displays a list of tasks with actions to edit, complete, or delete each task.
+  Props:
+    - tasks: Task[] - the list of tasks to display
+    - loading: boolean - whether the list is loading
+  Emits:
+    - deleted: when a task is deleted
+    - updated: when a task is updated (completion toggled)
+-->
 <template>
     <div class="flex justify-center col">
+        <!-- ===== LOADING SPINNER SECTION ===== -->
         <v-progress-circular v-if="loading" indeterminate color="primary" class="my-8" />
+        <!-- ===== END LOADING SPINNER SECTION ===== -->
+
+        <!-- ===== TASK TABLE SECTION ===== -->
         <v-list v-else class="rounded-lg bg-transparent w-100">
             <template v-for="(task, index) in tasks" :key="task.id">
                 <v-list-item @click="openTask(task.id)" :class="[
                     'rounded-lg mb-2 transition-all',
                     task.is_completed ? 'completed-task' : 'pending-task',
                 ]" style="cursor:pointer; min-height: 64px;">
+                    <!-- ===== TASK STATUS ICON SECTION ===== -->
                     <template #prepend>
                         <v-icon v-if="task.is_completed" color="success" class="mr-2"
                             @click="toggleTaskCompletion(task)">mdi-check-circle</v-icon>
                         <v-icon v-else color="warning" class="mr-2"
                             @click="toggleTaskCompletion(task)">mdi-clock-outline</v-icon>
                     </template>
+                    <!-- ===== END TASK STATUS ICON SECTION ===== -->
 
                     <v-list-item-title class="font-weight-medium text-body-1">
                         {{ task.title }}
@@ -22,6 +39,7 @@
                         <span>{{ formatDate(task.due_date) }}</span>
                     </v-list-item-subtitle>
 
+                    <!-- ===== ACTION BUTTONS SECTION ===== -->
                     <template v-slot:append>
                         <div class="d-flex align-center" style="gap: 8px;">
                             <v-btn icon :to="`/tasks/${task.id}`" @click.stop size="small" variant="text">
@@ -32,6 +50,7 @@
                             </v-btn>
                         </div>
                     </template>
+                    <!-- ===== END ACTION BUTTONS SECTION ===== -->
                 </v-list-item>
                 <v-divider v-if="index < tasks.length - 1" />
             </template>
@@ -42,10 +61,13 @@
                 </v-list-item-title>
             </v-list-item>
         </v-list>
+        <!-- ===== END TASK TABLE SECTION ===== -->
 
+        <!-- ===== TASK DETAIL DIALOG SECTION ===== -->
         <v-dialog v-model="dialog" max-width="600px" v-if="selectedTaskId">
             <TaskDetail :taskId="selectedTaskId || 0" @close="dialog = false" @updated="$emit('updated')" />
         </v-dialog>
+        <!-- ===== END TASK DETAIL DIALOG SECTION ===== -->
     </div>
 </template>
 

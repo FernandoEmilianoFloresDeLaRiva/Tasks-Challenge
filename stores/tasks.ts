@@ -1,8 +1,11 @@
 import { defineStore } from "pinia";
 import { Task } from "~/entities/Task.entity";
-import { TaskDetail } from "~/entities/TaskDetail.entity";
 import type { TaskPayloadDTO } from "~/entities/TaskPayload.dto";
 
+/**
+ * Pinia store for managing tasks state and actions.
+ * Handles fetching, creating, updating, and deleting tasks with optimistic UI updates.
+ */
 export const useTasksStore = defineStore("tasks", {
   state: () => ({
     tasks: [] as Task[],
@@ -11,6 +14,10 @@ export const useTasksStore = defineStore("tasks", {
     successMessage: null as string | null,
   }),
   actions: {
+    /**
+     * Fetch all tasks from the API and update the state.
+     * Resets error and success messages.
+     */
     async fetchTasks() {
       this.loading = true;
       try {
@@ -30,9 +37,17 @@ export const useTasksStore = defineStore("tasks", {
         this.loading = false;
       }
     },
+    
+    /**
+     * Create a new task (optimistic UI).
+     * Adds a temporary task to the state before the API call resolves.
+     * Replaces it with the real task on success, or removes it on error.
+     * @param taskData Task payload DTO
+     * @returns The created Task, or undefined on error
+     */
     async createTask(taskData: TaskPayloadDTO): Promise<Task | undefined> {
       this.loading = true;
-      // Carga optimista
+      // Optimistic UI: add a temporary task
       const tempId = Date.now();
       const optimisticTask = { ...taskData, id: tempId } as Task;
       this.tasks.unshift(optimisticTask);
@@ -40,6 +55,7 @@ export const useTasksStore = defineStore("tasks", {
         const { $tasksApi } = useNuxtApp();
         const response = await $tasksApi.create(taskData);
         if (hasTaskProp(response)) {
+          // Replace the optimistic task with the real one
           this.tasks = this.tasks.map((t) =>
             t.id === tempId ? response.task : t
           );
@@ -50,7 +66,7 @@ export const useTasksStore = defineStore("tasks", {
           throw new Error("Respuesta inesperada de la API");
         }
       } catch (err) {
-        // Revertir si falla
+        // Revert optimistic update on error
         this.tasks = this.tasks.filter((t) => t.id !== tempId);
         this.error = "Error al crear la tarea";
         console.error(err);
@@ -59,6 +75,13 @@ export const useTasksStore = defineStore("tasks", {
         this.loading = false;
       }
     },
+    /**
+     * Update an existing task by id.
+     * Updates the task in the state on success.
+     * @param id Task id
+     * @param taskData Task payload DTO
+     * @returns The updated Task, or undefined on error
+     */
     async updateTask(
       id: number,
       taskData: TaskPayloadDTO
@@ -83,9 +106,15 @@ export const useTasksStore = defineStore("tasks", {
         this.loading = false;
       }
     },
+    /**
+     * Delete a task by id (optimistic UI).
+     * Removes the task from the state before the API call resolves.
+     * Reverts the change if the API call fails.
+     * @param id Task id
+     */
     async deleteTask(id: number): Promise<void> {
       this.loading = true;
-      // Carga optimista
+      // Optimistic UI: remove the task immediately
       const prevTasks = [...this.tasks];
       this.tasks = this.tasks.filter((t) => t.id !== id);
       try {
@@ -94,7 +123,7 @@ export const useTasksStore = defineStore("tasks", {
         this.error = null;
         this.successMessage = "Tarea eliminada exitosamente";
       } catch (err) {
-        // Revertir si falla
+        // Revert optimistic update on error
         this.tasks = prevTasks;
         this.error = "Error al eliminar la tarea";
         console.error(err);
@@ -105,11 +134,22 @@ export const useTasksStore = defineStore("tasks", {
     },
   },
   getters: {
+    /**
+     * Get all completed tasks
+     */
     completedTasks: (state) => state.tasks?.filter((t) => t.is_completed),
+    /**
+     * Get all pending (not completed) tasks
+     */
     pendingTasks: (state) => state.tasks?.filter((t) => !t.is_completed),
   },
 });
 
+/**
+ * Type guard to check if an object has a 'task' property (from API response)
+ * @param obj Any object
+ * @returns True if obj has a 'task' property
+ */
 function hasTaskProp(obj: any): obj is { task: Task } {
   return obj && typeof obj === "object" && "task" in obj;
 }

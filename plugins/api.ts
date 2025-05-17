@@ -1,10 +1,17 @@
+/**
+ * api.ts Nuxt plugin
+ * ------------------
+ * Provides the $tasksApi object for interacting with the remote tasks API.
+ * Handles authentication and all CRUD operations for tasks.
+ * Injects $tasksApi into the Nuxt app context.
+ */
 export default defineNuxtPlugin(() => {
   const baseURL = "https://ecsdevapi.nextline.mx/vdev/tasks-challenge/";
   const authToken =
     "e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd";
 
   const tasksApi = {
-    // Obtener todas las tareas
+    // Get all tasks
     getAll: async () =>
       await $fetch("tasks", {
         baseURL,
@@ -16,7 +23,7 @@ export default defineNuxtPlugin(() => {
         },
       }),
 
-    // Obtener una tarea por id
+    // Get a task by id
     getOne: async (id: number) =>
       (await $fetch(`tasks/${id}`, {
         baseURL,
@@ -28,7 +35,7 @@ export default defineNuxtPlugin(() => {
         },
       }) as unknown as [0])[0],
       
-    // Crear nueva tarea
+    // Create a new task
     create: async (data: any) =>
       await $fetch("tasks", {
         method: "POST",
@@ -44,7 +51,7 @@ export default defineNuxtPlugin(() => {
         }).toString(),
       }),
 
-    // Actualizar tarea existente
+    // Update existing task
     update: async (id: number, data: any) =>
       await $fetch(`tasks/${id}`, {
         method: "PUT",
@@ -60,7 +67,7 @@ export default defineNuxtPlugin(() => {
         }).toString(),
       }),
 
-    // Eliminar tarea
+    // Delete a task
     delete: async (id: number) =>
       await $fetch(`tasks/${id}`, {
         method: "DELETE",

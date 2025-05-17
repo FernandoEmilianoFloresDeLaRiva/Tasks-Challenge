@@ -1,3 +1,8 @@
+<!--
+  tasks/[id].vue
+  --------------
+  Page for editing an existing task. Loads the task and shows the TaskForm component.
+-->
 <template>
   <v-container>
     <v-row>

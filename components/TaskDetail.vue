@@ -1,5 +1,16 @@
+<!--
+  TaskDetail.vue
+  ---------------
+  Shows detailed information about a single task.
+  Props:
+    - taskId: number - the id of the task to display
+  Emits:
+    - close: when the detail dialog is closed
+    - updated: when the task is updated
+-->
 <template>
     <v-card class="py-4">
+        <!-- ===== HEADER & ACTIONS SECTION ===== -->
         <v-card-actions class="pr-9 flex-wrap">
             <v-btn icon @click="$emit('close')">
                 <v-icon>mdi-close</v-icon>
@@ -11,11 +22,15 @@
             <v-spacer />
             <v-btn color="primary" :to="`/tasks/${taskId}`">Editar</v-btn>
         </v-card-actions>
+        <!-- ===== END HEADER & ACTIONS SECTION ===== -->
 
+        <!-- ===== LOADING SPINNER SECTION ===== -->
         <div v-if="loading" class="flex justify-center align-center col w-100">
             <v-progress-circular indeterminate color="primary" class="my-8" />
         </div>
+        <!-- ===== END LOADING SPINNER SECTION ===== -->
 
+        <!-- ===== TASK DETAILS LIST SECTION ===== -->
         <v-card-text v-else>
             <v-list class="rounded-lg">
                 <v-list-item>
@@ -68,6 +83,7 @@
                 </v-list-item>
             </v-list>
         </v-card-text>
+        <!-- ===== END TASK DETAILS LIST SECTION ===== -->
 
     </v-card>
 </template>

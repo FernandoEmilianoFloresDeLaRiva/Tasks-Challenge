@@ -1,27 +1,42 @@
+<!--
+  TaskForm.vue
+  -------------
+  Task form component for creating and editing tasks.
+  Props:
+    - task: Task | TaskDetail (optional) - the task to edit, or null for a new task
+  Emits:
+    - created: when a new task is created
+    - updated: when an existing task is updated
+    - cancel-edit: when the user cancels editing
+-->
 <template>
+    <!-- ===== ALERT MESSAGES SECTION ===== -->
     <v-alert v-if="successMessage" type="success" class="mb-4">
         {{ successMessage }}
     </v-alert>
     <v-alert v-if="error" type="error" class="mb-4">
         {{ error }}
     </v-alert>
+    <!-- ===== END ALERT MESSAGES SECTION ===== -->
+
     <v-card variant="outlined" class="my-6 pt-4 px-4 elevation-1 rounded-lg border-none">
+        <!-- ===== FORM HEADER SECTION ===== -->
         <v-card-title class="text-h6 font-weight-bold px-0 text-center">
             {{ editing ? 'Editar Tarea' : 'Nueva Tarea' }}
         </v-card-title>
+        <!-- ===== END FORM HEADER SECTION ===== -->
         <v-card-text class="px-0">
             <v-form @submit.prevent="submit">
-
+                <!-- ===== FORM FIELDS SECTION ===== -->
                 <v-text-field v-model="form.title" label="Título" :rules="[(v) => !!v || 'El título es requerido']"
                     required />
-
                 <v-text-field v-model="form.due_date" label="Fecha de vencimiento" type="date" />
                 <v-textarea v-model="form.description" label="Descripción" rows="1" auto-grow row-height="24" />
-
                 <v-textarea v-model="form.comments" label="Comentarios" rows="1" auto-grow row-height="24" />
-
                 <v-text-field v-model="form.tags" label="Tags" />
                 <v-checkbox v-model="form.is_completed" label="Completada" />
+                <!-- ===== END FORM FIELDS SECTION ===== -->
+                <!-- ===== ACTION BUTTONS SECTION ===== -->
                 <v-row>
                     <v-col cols="12" md="6">
                         <v-btn color="primary" type="submit" :loading="loading" class="w-100"
@@ -35,6 +50,7 @@
                         </v-btn>
                     </v-col>
                 </v-row>
+                <!-- ===== END ACTION BUTTONS SECTION ===== -->
             </v-form>
         </v-card-text>
     </v-card>

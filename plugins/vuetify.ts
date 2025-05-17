@@ -1,3 +1,9 @@
+/**
+ * vuetify.ts Nuxt plugin
+ * ----------------------
+ * Initializes Vuetify and injects it into the Nuxt app.
+ * Sets up default theme and component registration.
+ */
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
