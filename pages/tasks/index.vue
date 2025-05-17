@@ -24,6 +24,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useTasksStore } from '~/stores/tasks'
+import { useHead } from '#imports'
+
+useHead({
+  title: 'Task Manager | All Tasks',
+  meta: [
+    { name: 'description', content: 'Browse, filter, and manage all your tasks in one place.' }
+  ]
+})
 
 const tasksStore = useTasksStore()
 onMounted(() => tasksStore.fetchTasks())

@@ -13,8 +13,17 @@
   </v-container>
 </template>
 <script setup lang="ts">
+import { useHead } from '#imports'
+
+useHead({
+  title: 'Task Manager | Add Task',
+  meta: [
+    { name: 'description', content: 'Create a new task and keep your work organized.' }
+  ]
+})
+
 const router = useRouter()
 function goToList() {
   router.push('/tasks')
 }
-</script> 
+</script>

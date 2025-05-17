@@ -15,6 +15,15 @@
 </template>
 <script setup lang="ts">
 import { TaskDetail } from '~/entities/TaskDetail.entity'
+import { useHead } from '#imports'
+
+useHead({
+  title: 'Task Manager | Edit Task',
+  meta: [
+    { name: 'description', content: 'Edit your task details and stay on top of your work.' }
+  ]
+})
+
 const route = useRoute()
 const router = useRouter()
 const task = ref<TaskDetail | null>(null)
