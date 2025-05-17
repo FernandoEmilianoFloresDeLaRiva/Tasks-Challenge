@@ -66,31 +66,21 @@ const { form, editing, resetForm } = useTaskForm(props?.task)
 
 const submit = async () => {
     try {
+        const taskPayload = new TaskPayloadDTO()
+            .setTitle(form.value.title)
+            .setIsCompleted(form.value.is_completed)
+            .setDueDate(form.value.due_date)
+            .setComments(form.value?.comments || '')
+            .setDescription(form.value?.description || '')
+            .setTags(form.value?.tags || '')
+            .build()
         if (editing.value) {
-            await updateTask(
-                props.task.id,
-                new TaskPayloadDTO()
-                    .setId(props.task.id)
-                    .setTitle(form.value.title)
-                    .setIsCompleted(form.value.is_completed)
-                    .setDueDate(form.value.due_date)
-                    .setComments(form.value.comments)
-                    .setDescription(form.value.description)
-                    .setTags(form.value.tags)
-                    .build()
-            )
+            await updateTask(props.task.id, taskPayload)
             setTimeout(() => {
                 emit('updated')
             }, 1500)
         } else {
-            await createTask(new TaskPayloadDTO()
-                .setTitle(form.value.title)
-                .setIsCompleted(form.value.is_completed)
-                .setDueDate(form.value.due_date)
-                .setDescription(form.value.description)
-                .setComments(form.value.comments)
-                .setTags(form.value.tags)
-                .build())
+            await createTask(taskPayload)
             setTimeout(() => {
                 emit('created')
                 resetForm()
